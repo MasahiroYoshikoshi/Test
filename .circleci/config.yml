@@ -7,4 +7,21 @@ jobs:
       only:
         - master
         - develop
-        -.
+        
+    # 使用するAndroid APIのバージョンを設定
+    docker:
+      # specify the version you desire here
+      - image: circleci/android:api-27-alpha
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+              
+      # アプリケーションのビルド
+      - run:
+          name: gradle dependencies
+          command: ./gradlew androidDependencies
