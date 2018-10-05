@@ -1,0 +1,51 @@
+version: 2
+jobs:
+  # ビルド対象のブランチを指定。
+  # masterブランチとdevelopブランチ以外のプッシュではCircleCIが走らないようする。
+  build:
+    branches:
+      only:
+        - master
+        - develop
+    # 使用するAndroid APIのバージョンを設定
+    docker:
+      # specify the version you desire here
+      - image: circleci/android:api-28-alpha
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "chatmessageview/build.gradle" }}
+
+      # sdkのアップデート
+      # build.gradleで設定しているbuildToolsVersion等と合わせるるとよさそう。
+      - run:
+          name: update android sdk
+          command: |
+              echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-google-google_play_services,extra-google-m2repository,android-28
+              echo y | android update sdk --no-ui --all --filter build-tools-28.0.0
+              
+      # アプリケーションのビルド
+      - run:
+          name: gradle dependencies
+          command: ./gradlew androidDependencies
+          
+      # ビルドキャッシュの保存
+      - save_cache:
+          paths: ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "chatmessageview/build.gradle" }}
+
+   
+      - store_test_results:
+          path: example/build/test-results
+
+      - store_artifacts:
+          path: example/build/reports
+          destination: reports
