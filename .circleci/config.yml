@@ -6,7 +6,6 @@ jobs:
     branches:
       only:
         - master
-        - develop
         
     # 使用するAndroid APIのバージョンを設定
     docker:
