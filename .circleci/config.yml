@@ -1,32 +1,37 @@
-version: 2
-jobs:
-  # ビルド対象のブランチを指定。
-  # masterブランチとdevelopブランチ以外のプッシュではCircleCIが走らないようする。
-  build:
-    branches:
-      only:
-        - master
-        
-    # 使用するAndroid APIのバージョンを設定
-    docker:
-      # specify the version you desire here
-      - image: circleci/android:api-27-alpha
+achine:
+  pre:
+    # デバッグ用に情報を出力
+    - env
+    - pwd
+    - ls
 
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
+# チェックアウト関連
+checkout:
+  post:
+    - echo CheckoutPost
+    - git submodule sync
+    - git submodule update --init
 
-    steps:
-      - checkout
-              
-      # アプリケーションのビルド
-      - run:
-          name: gradle dependencies
-          command: ./gradlew androidDependencies
+# 依存関係解決
+dependencies:
+  pre:
+    # ライセンスへの同意
+    - echo y | android update sdk --no-ui --all --filter "tools,build-tools-25.0.2,platform-tools,android-25,extra-android-m2repository"
+    - mkdir -p $ANDROID_HOME/licenses
+    # ローカル開発環境で同意した情報を使用する
+    # OSXの場合このファイルは`~/Library/Android/sdk/licenses/android-sdk-license`
+    - echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > ${ANDROID_HOME}/licenses/android-sdk-license
 
-  workflows:
-   version: 2
-   build_and_test: # workflow名
-    jobs:
-      - build
+  override:
+      - ./gradlew dependencies || true
+
+# テスト実行
+test:
+  override:
+    - ./gradlew test
+
+# コンパイル
+compile:
+  override:
+    - ./gradlew assembleDebug
+    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
