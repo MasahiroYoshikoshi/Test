@@ -49,3 +49,4 @@ jobs:
       - store_artifacts:
           path: example/build/reports
           destination: reports
+          - .
