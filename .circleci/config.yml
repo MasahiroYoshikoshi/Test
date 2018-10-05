@@ -1,7 +1,4 @@
 version: 2
-dependencies:  
- pre:  
-  chmod +x ./gradlew  
 jobs:
   build:
     working_directory: ~/code
@@ -18,6 +15,7 @@ jobs:
 #         command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
+          command: sudo chmod +x gradlew
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
