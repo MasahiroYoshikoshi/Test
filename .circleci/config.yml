@@ -7,3 +7,4 @@ jobs:
       only:
         - master
         - develop
+        -.
