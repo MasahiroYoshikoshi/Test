@@ -1,13 +1,19 @@
 version: 2
 jobs:
-  dependencies:
-    pre:
-      - sudo pip install -U crcmod
-    override:
-      - echo y | android update sdk --no-ui --all --filter "android-28,build-tools-28.0.0"
-      - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
-      - echo $CLIENT_SECRET | base64 --decode > ${HOME}/client-secret.json
-      - sudo /opt/google-cloud-sdk/bin/gcloud config set project $PROJECT_ID
-      - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
-      - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components install beta
-      - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-28-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    dependencies:
+      pre:
+        - sudo pip install -U crcmod
+      override:
+        - echo y | android update sdk --no-ui --all --filter "android-28,build-tools-28.0.0"
+        - echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"
+        - echo $CLIENT_SECRET | base64 --decode > ${HOME}/client-secret.json
+        - sudo /opt/google-cloud-sdk/bin/gcloud config set project $PROJECT_ID
+        - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+        - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components install beta
+        - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
