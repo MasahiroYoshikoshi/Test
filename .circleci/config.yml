@@ -54,3 +54,4 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+      - run: gsutil cp gs://test-lab-6u0muwcsb969m-i7ius44bisw8q $CIRCLE_ARTIFACTS/
