@@ -10,6 +10,10 @@ jobs:
       - checkout
       - run: echo "$GOOGLE_AUTH" | base64 -i --decode > "$HOME/gcp-key.json"
       - run: gcloud auth activate-service-account --key-file "$HOME/gcp-key.json"
+      - run: gcloud components update
+      - run: gcloud components update beta
+      - run: gcloud config set project test-d2706
+      - run: gcloud auth login
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
