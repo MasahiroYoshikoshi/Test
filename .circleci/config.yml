@@ -49,8 +49,8 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-       # testはJUnitテストを実行する
-       # lint testは静的コードチェックをしてくれるらしい
+      # testはJUnitテストを実行する
+      # lint testは静的コードチェックをしてくれるらしい
       - run:
           name: unit test
           command: |
