@@ -7,7 +7,16 @@ jobs:
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
+      # GitHubからソースコードを取得
       - checkout
+      # GoogleAPIの認証
+      # GoogleAPIの認証キーを（json形式）をbase64でエンコードしたものをCircleCIの環境変数に格納しておき
+      # それをデコードして認証を行う
+      # GoogleAPIでは「Cloud Testing API」，「Cloud Tool Results API」，「Google Cloud Storage JSON API」の３つのAPIを有効化する
+      # 認証後はGoogleSDKの最新取得とインストールを行い
+      # Testlabを使用するFireBaseのプロジェクトをセットする
+      # 同プロジェクト側にもGoogleAPIの権限を割り当てる必要がある
+      # 一応参考URL（情報が色々と古い。。。）https://qiita.com/Horie1024/items/3c22b67634deb0dd4645
       - run:
           name: auth
           command: |
@@ -24,11 +33,13 @@ jobs:
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
+      # AndroidSDKの最新取得
       - run:
          name: update android sdk
          command: |
              echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-google-google_play_services,extra-google-m2repository,android-28
              echo y | android update sdk --no-ui --all --filter build-tools-28.0.0
+      # デバッグビルドを実行してapkを作成する（テスト用apk含む）
       - run:
           name: gradle assembleDebug
           command: |
@@ -38,17 +49,22 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+       # testはJUnitテストを実行する
+       # lint testは静的コードチェックをしてくれるらしい
       - run:
           name: unit test
           command: |
               ./gradlew test
               ./gradlew lint test
+      # FireBaseのTest labからRoboTestを実行
       - run:
           name: robo test
           command: gcloud firebase test android run --type robo --app app/build/outputs/apk/debug/app-debug.apk --device model=Nexus6P,version=27,locale=ja_JP,orientation=portrait
+      # FireBaseのTest labからInstrumentationTestを実行
       - run:
           name: instrumentation test
           command: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=Nexus6P,version=27,locale=ja_JP
+      # JUnitテストとlint testの結果をCircleCIで参照できるように保存
       - store_artifacts:
           path: app/build/reports
           destination: reports
