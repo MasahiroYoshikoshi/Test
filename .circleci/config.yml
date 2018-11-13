@@ -56,12 +56,6 @@ jobs:
           command: |
               ./gradlew test
               ./gradlew lint test
-      # 権限付与
-      - run:
-          name: sudo
-          command: |
-            sudo ln -s /usr/lib/x86_64-linux-gnu/libGLESv2.so /usr/lib/chromium/swiftshader/libGLESv2.so 
-            sudo ln -s /usr/lib/x86_64-linux-gnu/libEGL.so /usr/lib/chromium/swiftshader/libEGL.so
       # circleCIで使用可能なシステムイメージを確認
       - run:
           name: Show list of system-images
@@ -69,7 +63,7 @@ jobs:
       # エミュレータの設定
       - run:
           name: Setup Emulator
-          command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a"
+          command: sdkmanager "system-images;android-28;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-28;default;armeabi-v7a"
       # エミュレータの起動
       - run:
           name: Launch Emulator
