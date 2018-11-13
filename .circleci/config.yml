@@ -58,7 +58,7 @@ jobs:
               ./gradlew lint test
       # Œ ŒÀ•t—^
       - run:
-          name:sudo
+          name: sudo
           command: |
             sudo ln -s /usr/lib/x86_64-linux-gnu/libGLESv2.so /usr/lib/chromium/swiftshader/libGLESv2.so 
             sudo ln -s /usr/lib/x86_64-linux-gnu/libEGL.so /usr/lib/chromium/swiftshader/libEGL.so
