@@ -56,6 +56,12 @@ jobs:
           command: |
               ./gradlew test
               ./gradlew lint test
+      # 権限付与
+      - run:
+          name:sudo
+          command: |
+            sudo ln -s /usr/lib/x86_64-linux-gnu/libGLESv2.so /usr/lib/chromium/swiftshader/libGLESv2.so 
+            sudo ln -s /usr/lib/x86_64-linux-gnu/libEGL.so /usr/lib/chromium/swiftshader/libEGL.so
       # circleCIで使用可能なシステムイメージを確認
       - run:
           name: Show list of system-images
