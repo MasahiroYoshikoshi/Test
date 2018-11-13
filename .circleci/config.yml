@@ -37,8 +37,8 @@ jobs:
       - run:
          name: update android sdk
          command: |
-             echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-google-google_play_services,extra-google-m2repository,android-28
-             echo y | android update sdk --no-ui --all --filter build-tools-28.0.0
+             echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-google-google_play_services,extra-google-m2repository,android-26
+             echo y | android update sdk --no-ui --all --filter build-tools-26.0.0
       # デバッグビルドを実行してapkを作成する（テスト用apk含む）
       - run:
           name: gradle assembleDebug
