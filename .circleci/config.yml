@@ -37,8 +37,8 @@ jobs:
       - run:
          name: update android sdk
          command: |
-             echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-google-google_play_services,extra-google-m2repository,android-26
-             echo y | android update sdk --no-ui --all --filter build-tools-26.0.0
+             echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-google-google_play_services,extra-google-m2repository,android-27
+             echo y | android update sdk --no-ui --all --filter build-tools-27.0.0
       # デバッグビルドを実行してapkを作成する（テスト用apk含む）
       - run:
           name: gradle assembleDebug
@@ -65,12 +65,13 @@ jobs:
           name: Setup Emulator
           command: |
               echo y | sudo apt-get install libgles2-mesa-dev
-              sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a"
+              sdkmanager "system-images;android-27;default;x86_64" && echo "no" | avdmanager create avd -n test -k "system-images;android-27;default;x86_64"
+#              sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a"
       # エミュレータの起動
       - run:
           name: Launch Emulator
           command: |
-              cd ${ANDROID_HOME}/emulator;ls
+              cd ${ANDROID_HOME}/emulator
               export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel on -gpu off
           background: true
       # エミュレータの起動待った後、スクリーンロックを解除する
