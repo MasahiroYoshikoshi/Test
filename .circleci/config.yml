@@ -65,7 +65,6 @@ jobs:
           name: Setup Emulator
           command: |
               echo y | sudo apt-get install libgles2-mesa-dev
-#              sdkmanager "system-images;android-27;default;x86_64" && echo "no" | avdmanager create avd -n test -k "system-images;android-27;default;x86_64"
               sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a"
       # エミュレータの起動
       - run:
