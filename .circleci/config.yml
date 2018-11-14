@@ -83,7 +83,8 @@ jobs:
       # Expressoテストの実行
       - run:
           name: Run EspressoTests
-          command: ./gradlew example:connectedAndroidTest
+          command: ./gradlew cAT
+#          command: ./gradlew example:connectedAndroidTest
       # FireBaseのTest labからRoboTestを実行
 #      - run:
 #          name: robo test
