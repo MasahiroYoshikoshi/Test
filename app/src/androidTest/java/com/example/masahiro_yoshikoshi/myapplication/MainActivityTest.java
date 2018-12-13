@@ -40,7 +40,7 @@ public class MainActivityTest {
                                         1),
                                 0),
                         isDisplayed()));
-        textView.check(matches(withText("Hellolo World!")));
+        textView.check(matches(withText("Hello World!")));
     }
 
     private static Matcher<View> childAtPosition(
