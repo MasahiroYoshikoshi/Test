@@ -27,7 +27,7 @@ jobs:
               gcloud config set project test-d2706
       - run:
           name: ShowDir
-          command: ls ${HOME}
+          command: ls ${HOME}/code
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
