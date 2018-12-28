@@ -74,7 +74,7 @@ jobs:
           name: Launch Emulator
           command: |
               cd ${ANDROID_HOME}/emulator
-              export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel on -gpu off
+              export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -skin 1080x1920 -accel on -gpu off
           background: true
       # エミュレータの起動待った後、スクリーンロックを解除する
       - run:
